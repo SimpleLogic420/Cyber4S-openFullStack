@@ -29,8 +29,8 @@ async function dataBaseFile(){
   return database;
 }
 personRouter.delete("/:id", async (request, res) => {
-  const id = Number(request.params.id);
-  const response = await Person.deleteOne({ _id: id });
+   const id = Number(request.params.id);
+  const response = await Person.collection.deleteOne({ _id: id });
   if (response.deletedCount === 0) {
     res.send("delete was not succesful");
   }
@@ -46,14 +46,11 @@ personRouter.post("/", async (request, response) => {
   newPerson.id = getRandomInt(999);
   try {
     if (newPerson.name) {
-      console.log("in");
+      
           if (await isNameExist(newPerson.name, fileData)) {
-            console.log("insi");
             console.log(await isNameExist(newPerson.name))
-            
             response.status(404).end();
           } else {
-            console.log("inside");
             await createNewPerson(newPerson.id,newPerson.name,newPerson.number);
             response.json(newPerson);
           }

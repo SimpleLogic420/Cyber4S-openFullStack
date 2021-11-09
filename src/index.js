@@ -1,8 +1,8 @@
 import styles from "./styles.scss";
 import phoneBook from "./images/background.jpeg";
 import axios from "axios";
- const baseUrl = "/";
-//  command for change
+// const cors =require("cors");
+ const baseUrl = "http://localhost:3001/";
 
 async function openContactInfo(event) {
   const id = event.target.dataset.id;
@@ -16,6 +16,7 @@ async function renderPhoneBook(persons) {
   removeChildren(phoneBook);
   try {
     for (let person of persons) {
+      
       // rightdiv build
       const callIcon = createElement("i", [], ["fas fa-phone"]);
       // <i class="fas fa-info-circle" id="info" data-container="body" data-toggle="popover" data-placement="right">
@@ -26,7 +27,7 @@ async function renderPhoneBook(persons) {
         {
           "data-container": "body",
           "data-toggle": "popover",
-          "data-id": `${person.id}`,
+          "data-id": `${person._id}`,
         },
         { click: openContactInfo }
       );
@@ -47,9 +48,10 @@ async function renderPhoneBook(persons) {
         "button",
         [deleteIcon],
         ["button-delete"],
-        { "data-id": person.id },
+        { "data-id": person._id },
         { click: deletePhone }
       );
+      
       const rightDiv = createElement("div", [info, callBtn, deleteBtn], []);
       //   left div build
       const span = createElement("span", [person.number], []);
@@ -91,6 +93,7 @@ async function deletePhone(event) {
   try {
     event.target.closest("LI").remove();
   const id = event.target.closest('BUTTON').dataset.id;
+  
   await axios.delete(`${baseUrl}api/persons/${id}`);
   } catch (error) {
     console.log(error);

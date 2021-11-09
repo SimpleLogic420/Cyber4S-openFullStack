@@ -5,7 +5,8 @@ const personRouter = require("./routers/personRouter");
 const infoRouter = require("./routers/infoRouter");
 const morgan = require("morgan");
 const path = require("path");
-
+ const cors =require("cors");
+//  app.use(cors);
 app.use(express.json());
 
 const url= "mongodb+srv://mongooseAdmin:321674@cluster0.dtmhd.mongodb.net/phonebook?retryWrites=true&w=majority"

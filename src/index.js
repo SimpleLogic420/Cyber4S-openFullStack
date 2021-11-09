@@ -54,7 +54,11 @@ async function renderPhoneBook(persons) {
       const span = createElement("span", [person.number], []);
       const a = createElement("a", [person.name, span]);
       const leftDiv = createElement("div", [a]);
+<<<<<<< Updated upstream
       const li = createElement("li", [leftDiv, rightDiv], [], {}, {});
+=======
+      const li = createElement("li", [leftDiv,rightDiv], [], {id: `index-${person.name[0].toUpperCase()}`}, {});
+>>>>>>> Stashed changes
       phoneBook.append(li);
     }
   } catch (error) {}
@@ -83,12 +87,26 @@ async function getDataBase() {
 getDataBase();
 
 async function deletePhone(event) {
+<<<<<<< Updated upstream
   event.target.closest("LI").remove();
   const response = await axios.delete(
     `${baseUrl}api/persons/${event.target.dataset.id}`
   );
 }
 
+=======
+  try {
+    event.target.closest("LI").remove();
+  const id = event.target.closest('BUTTON').dataset.id;
+  await axios.delete(`${baseUrl}api/persons/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+  
+}
+
+  
+>>>>>>> Stashed changes
 function createElement(
   tagName,
   children = [],

@@ -1,1 +1,12 @@
+<<<<<<< Updated upstream
 node_modules
+=======
+node_modules
+requests
+response.send(JSON.stringify(await Person))
+
+
+
+
+  
+>>>>>>> Stashed changes

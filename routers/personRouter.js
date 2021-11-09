@@ -8,64 +8,47 @@ const Person = require("../mongodb/mongoPerson");
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-async function isNameExist(name) {
-  const database = JSON.parse(await fs.readFile("db.json", "utf-8"));
-
-  for (let person of database) {
-    if (person.name === name) {
-      return true;
-    }
-  }
-  
-  return false;
+function isNameExist(name, fileData) {
+  return fileData.findIndex((obj) => obj.name === name) !== -1;
 }
 
+
 personRouter.get("/", async (request, response) => {
-  const database = JSON.parse(await fs.readFile("db.json", "utf-8"));
-  response.json(database);
-   
+  response.send(await Person.find({}));
 });
 
-personRouter.get("/:id", async (request, response) => {
-  const persons = JSON.parse(await fs.readFile("db.json", "utf-8"));
-  
-  const id = Number(request.params.id);
-  const note = persons.find((person) => person.id === id);
- 
-  if (note) {
-    response.send(note);
-  } else {
-    response.status(404).end();
-  }
-
+personRouter.get("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const obj = await Person.findOne({ _id: id });
+  obj ? res.send(obj) : res.status(404).send();
 });
+
 
 async function dataBaseFile(){
   const database = JSON.parse(await fs.readFile("db.json", "utf-8"));
   return database;
 }
-personRouter.delete("/:id", async (req, res) => {
-  const fileData = await dataBaseFile();
-  const id = Number(req.params.id);
-  const index = fileData.findIndex((obj) => obj.id === id);
-  
-  index || index === 0 ? fileData.splice(index, 1) : a.log("s");
-  
-  await fs.writeFile("./db.json", JSON.stringify(fileData));
-  res.send("user was deleted successfully")
+personRouter.delete("/:id", async (request, res) => {
+  const id = Number(request.params.id);
+  const response = await Person.deleteOne({ _id: id });
+  if (response.deletedCount === 0) {
+    res.send("delete was not succesful");
+  }
   res.end();
 });
 
 
+
+
 personRouter.post("/", async (request, response) => {
   const newPerson = Object.assign({}, request.body);
+  const fileData = await Person.find({});
   newPerson.id = getRandomInt(999);
   try {
-    
-    
     if (newPerson.name) {
-      
-          if (await isNameExist(newPerson.name)) {
+      console.log("in");
+          if (await isNameExist(newPerson.name, fileData)) {
+            console.log("insi");
             console.log(await isNameExist(newPerson.name))
             
             response.status(404).end();
@@ -75,13 +58,12 @@ personRouter.post("/", async (request, response) => {
             response.json(newPerson);
           }
         }
-   
-
   } catch (error) {
     response.json(error);
   }
-
 });
+
+
 
 
 module.exports = personRouter;

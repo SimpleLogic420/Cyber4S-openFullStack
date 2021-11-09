@@ -14,7 +14,7 @@ async function renderPhoneBook(persons) {
   const phoneBook = document.getElementById("phoneBook");
   removeChildren(phoneBook);
   try {
-    for (let person of persons.persons) {
+    for (let person of persons) {
       // rightdiv build
       const callIcon = createElement("i", [], ["fas fa-phone"]);
       // <i class="fas fa-info-circle" id="info" data-container="body" data-toggle="popover" data-placement="right">
@@ -54,18 +54,14 @@ async function renderPhoneBook(persons) {
       const span = createElement("span", [person.number], []);
       const a = createElement("a", [person.name, span]);
       const leftDiv = createElement("div", [a]);
-<<<<<<< Updated upstream
-      const li = createElement("li", [leftDiv, rightDiv], [], {}, {});
-=======
       const li = createElement("li", [leftDiv,rightDiv], [], {id: `index-${person.name[0].toUpperCase()}`}, {});
->>>>>>> Stashed changes
       phoneBook.append(li);
     }
   } catch (error) {}
 }
 
 function sortArray(array) {
-  array.persons.sort(function (a, b) {
+  array.sort(function (a, b) {
     if (a.name.toLowerCase() < b.name.toLowerCase()) {
       return -1;
     }
@@ -77,8 +73,11 @@ function sortArray(array) {
 }
 
 async function getDataBase() {
+  
   const response = await axios.get(`${baseUrl}api/persons`);
+  
   const persons = response.data;
+  console.log(persons);
   sortArray(persons);
   // sort by alphabetic order
   renderPhoneBook(persons);
@@ -87,14 +86,7 @@ async function getDataBase() {
 getDataBase();
 
 async function deletePhone(event) {
-<<<<<<< Updated upstream
-  event.target.closest("LI").remove();
-  const response = await axios.delete(
-    `${baseUrl}api/persons/${event.target.dataset.id}`
-  );
-}
 
-=======
   try {
     event.target.closest("LI").remove();
   const id = event.target.closest('BUTTON').dataset.id;
@@ -106,7 +98,7 @@ async function deletePhone(event) {
 }
 
   
->>>>>>> Stashed changes
+
 function createElement(
   tagName,
   children = [],
@@ -158,7 +150,7 @@ async function filterLists(query) {
   console.log(query);
   const persons = await getDataBase();
   const filteredPersons = [];
-  for (const person of persons.persons) {
+  for (const person of persons) {
     const name = person.name.toLowerCase();
     if (name.indexOf(query) !== -1) {
       filteredPersons.push(person);

@@ -15,7 +15,9 @@ async function addContact(event) {
         console.log("last")
         const number = document.getElementById("number").value;
         console.log("number") 
-         if(validateFirstName(firstName) && validateLastName(lastName) && validateNumber(number)){             
+         if(validateFirstName(firstName) && validateLastName(lastName) && validateNumber(number)){  
+            label.style.display = "inline";
+           
              label.innerText = "Loading...";
             console.log("inside the if of add contact")
             const response =await axios.post(`${baseUrl}api/persons`, {
@@ -23,7 +25,8 @@ async function addContact(event) {
                 number: number
             });
             label.innerText = `Added ${firstName} ${lastName} Successfuly`    
-            setTimeout(()=>{label.innerText=""}, 3*1000);  
+            setTimeout(()=>{label.style.display = "none";
+        }, 3*1000);  
             
          }        
     } catch(error){
@@ -37,26 +40,43 @@ const addButton=document.getElementById("addButton")
 addButton.addEventListener("click", addContact);
 console.log(addButton)
 
-function validateFirstName(name){
-    if(/^[a-zA-Z]/.test(name)){
-        return true;
+function validateFirstName(name) {
+    if (/^[a-zA-Z0-9 ]+$/.test(name)) {
+      return true;
     }
-    console.log("First name is not invaid");
+    errorDiv.style.display = "inline";
+    errorDiv.innerText = "First name is not invaid";
+    setTimeout(() => {
+      errorDiv.innerText = "";
+      errorDiv.style.display = "none";
+    }, 3 * 1000);
     return false;
-}
-
-function validateLastName(name){
-    if(/^[a-zA-Z]/.test(name)){
-        return true;
+  }
+  
+  function validateLastName(name) {
+    if (/^[a-zA-Z0-9 ]+$/.test(name)) {
+      return true;
     }
-    console.log("Last name is not invaid");
+    errorDiv.style.display = "inline";
+    errorDiv.innerText = "Last name is not invaid";
+    setTimeout(() => {
+      errorDiv.innerText = "";
+      errorDiv.style.display = "none";
+    }, 3 * 1000);
     return false;
-}
-
-function validateNumber(number){
-    if(number.length <= 11 &&  number.length >= 7){
-        return true;
+  }
+  
+  function validateNumber(number) {
+    if (number.length <= 11 && number.length >= 7) {
+      return true;
     }
-    console.log("Number is not invaid");
+    errorDiv.style.display = "inline";
+    errorDiv.innerText = "Number is not invaid";
+    setTimeout(() => {
+      errorDiv.innerText = "";
+      errorDiv.style.display = "none";
+    }, 3 * 1000);
+    console.log();
     return false;
-}
+  }
+  

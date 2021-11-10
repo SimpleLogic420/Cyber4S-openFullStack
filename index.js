@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 
 app.get("/addContact", (req, res) => {
   console.log("going to next page")
-  res.sendFile(path.resolve("./dist/Infopage.html"));
+  res.sendFile(path.resolve("./dist/InfoPage.html"));
 });
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));

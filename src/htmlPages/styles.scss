@@ -1,3 +1,8 @@
+body {
+  // background-color: aqua;
+}
+// input
+// * { box-sizing:border-box; }
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 /* basic stylings ------------------------------------------ */
 
@@ -160,6 +165,8 @@ input:focus ~ .highlight {
   transition: all 0.1s linear;
   background-color: white;
   cursor: pointer;
+  
+ 
 
   &:hover {
     border: 1px solid transparent;
@@ -253,17 +260,18 @@ input:focus ~ .highlight {
 
 // add button insdie real button
 
-.resultdiv {
+.resultdiv{
   font-family: "Roboto", sans-serif;
   color: #2b2a24;
-
+  
   font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
-  :hover {
+  :hover{
     opacity: 0.5;
   }
+  
 }
 
 // info icon

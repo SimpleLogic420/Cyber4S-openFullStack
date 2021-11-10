@@ -1,15 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const dotenv = require("dotenv").config();
 const personRouter = require("./routers/personRouter");
 const infoRouter = require("./routers/infoRouter");
 const morgan = require("morgan");
 const path = require("path");
- const cors =require("cors");
-//  app.use(cors);
+const cors =require("cors");
+const password = process.env.password;
+const userAdmin = process.env.userAdmin;
+
+
+app.use(cors());
 app.use(express.json());
 
-const url= "mongodb+srv://mongooseAdmin:321674@cluster0.dtmhd.mongodb.net/phonebook?retryWrites=true&w=majority"
+const url= `mongodb+srv://${userAdmin}:${password}@cluster0.dtmhd.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url);//matbe url ?'mongodb://localhost:27017/usersdb'
 const db = mongoose.connection;

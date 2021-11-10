@@ -8,7 +8,7 @@ infoRouter.get("/", async (request, response) => {
   response.send(
     `Phonebook has info for ${await Person.find(
       {}
-    ).count()} peaple.\n${new Date()}`
+    ).count()} people.\n${new Date()}`
   );
 });
 module.exports = infoRouter;

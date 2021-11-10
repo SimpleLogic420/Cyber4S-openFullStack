@@ -4,6 +4,7 @@ const app = express();
 const dotenv = require("dotenv").config();
 const personRouter = require("./routers/personRouter");
 const infoRouter = require("./routers/infoRouter");
+const {errorHandler}= require("./src/error-Handling/errorHandler");
 const morgan = require("morgan");
 const path = require("path");
 const cors =require("cors");
@@ -43,6 +44,7 @@ app.use(
 
 app.use("/api/persons", personRouter);
 app.use("/info/", infoRouter);
+app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 3001;

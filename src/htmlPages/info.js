@@ -20,16 +20,33 @@ async function addContact(event) {
            
              label.innerText = "Loading...";
             console.log("inside the if of add contact")
-            const response =await axios.post(`${baseUrl}api/persons`, {
-                name: firstName + " " + lastName,
-                number: number
+            let response;
+      try {
+        response = await axios.post(`${baseUrl}api/persons`, {
+          name: firstName + " " + lastName,
+          number: number,
+        });
+        label.innerText = `Added ${firstName} ${lastName} Successfuly`;
+      } catch (error) {
+        if (error.response.status === 404) {
+          try {
+            response = await axios.put(`${baseUrl}api/persons`, {
+              name: firstName + " " + lastName,
+              number: number,
             });
-            label.innerText = `Added ${firstName} ${lastName} Successfuly`    
+            label.innerText = `Updated ${firstName} ${lastName}`;
+          } catch (error) {
+            displayError(error.response.data.message);
+          }
+        }
+      }
+    
             setTimeout(()=>{label.style.display = "none";
         }, 3*1000);  
             
          }        
     } catch(error){
+       
         label.innerText = "";
         console.log(error);
         return error;
@@ -79,4 +96,83 @@ function validateFirstName(name) {
     console.log();
     return false;
   }
+//   update contact
+//   async function updateContact() {
+//     console.log("put request");
+//     const label = document.getElementById("resultdiv");
+//     try {
+//       const firstName = document.getElementById("firstName").value;
+//       const lastName = document.getElementById("lastName").value;
+//       const number = document.getElementById("number").value;
+//       const token = document.getElementById("token").value;
+//       if (
+//         validateFirstName(firstName) &&
+//         validateLastName(lastName) &&
+//         validateNumber(number)
+//       ) {
+//         label.style.display = "block";
+//         label.innerText = "Loading...";
+//         const response = await axios.put("/api/persons", {
+//           name: firstName + " " + lastName,
+//           number: number,
+//           token: token,
+//         });
+//         label.innerText = response.data;
+//         setTimeout(() => {
+//           label.style.display = "none";
+//           label.innerText = "";
+//         }, 3 * 1000);
+//       }
+//     } catch (err) {
+//       const errorDiv = document.getElementById("errordiv");
+//       label.style.display = "none";
+//       errorDiv.style.display = "block";
+//       errorDiv.innerText = `${err.response.data.error}`;
+//       setTimeout(() => {
+//         errorDiv.style.display = "none";
+//         errorDiv.innerText = "";
+//       }, 3 * 1000);
+//     }
+//   }
+
+//   async function addContact(event) {
+//     event.preventDefault();
+//     const label = document.getElementById("resultdiv");
+//     try {
+//       const firstName = document.getElementById("firstName").value;
+//       const lastName = document.getElementById("lastName").value;
+//       const number = document.getElementById("number").value;
+      
+//       if (
+//         validateFirstName(firstName) &&
+//         validateLastName(lastName) &&
+//         validateNumber(number)
+//       ) {
+//         label.style.display = "inline";
+//         label.innerText = "Loading...";
+//         const response = await axios.post("/api/persons", {
+//           name: firstName + " " + lastName,
+//           number: number,
+//         });
+//         label.innerText = `Added ${firstName} ${lastName} Successfuly`;
+//         setTimeout(() => {
+//           label.style.display = "none";
+//           label.innerText = "";
+//         }, 3 * 1000);
+//       }
+//     } catch (error) {
+//       const errorDiv = document.getElementById("errordiv");
+//       console.log("gets hereeeee")
+//       if (error.response.data.error === "name must exsits in database") {
+//         return updateContact();
+//       }
+//       label.style.display = "none";
+//       errorDiv.style.display = "block";
+//       errorDiv.innerText = `${error.response.data.error}`;
+//       setTimeout(() => {
+//         errorDiv.style.display = "none";
+//         errorDiv.innerText = "";
+//       }, 3 * 1000);
+//     }
+//   }
   

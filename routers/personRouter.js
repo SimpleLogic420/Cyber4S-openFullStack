@@ -13,6 +13,7 @@ function isNameExist(name, fileData) {
 }
 
 
+
 personRouter.get("/", async (request, response) => {
   response.send(await Person.find({}));
 });
@@ -32,7 +33,7 @@ personRouter.delete("/:id", async (request, res) => {
    const id = Number(request.params.id);
   const response = await Person.collection.deleteOne({ _id: id });
   if (response.deletedCount === 0) {
-    res.send("delete was not succesful");
+    return next({status:400,mesage:"delete was not succesful"});
   }
   res.end();
 });
@@ -40,16 +41,17 @@ personRouter.delete("/:id", async (request, res) => {
 
 
 
-personRouter.post("/", async (request, response) => {
+personRouter.post("/", async (request, response,next) => {
   const newPerson = Object.assign({}, request.body);
   const fileData = await Person.find({});
   newPerson.id = getRandomInt(999);
   try {
     if (newPerson.name) {
-      
-          if (await isNameExist(newPerson.name, fileData)) {
-            console.log(await isNameExist(newPerson.name))
-            response.status(404).end();
+      console.log(isNameExist(newPerson.name, fileData))
+          if (isNameExist(newPerson.name, fileData)) {
+            console.log("yyyy")
+            return next({ status: 404, error: "name already exists in database" });
+            
           } else {
             await createNewPerson(newPerson.id,newPerson.name,newPerson.number);
             response.json(newPerson);
@@ -74,3 +76,19 @@ async function createNewPerson(id, name, number) {
     return false;
   }
 }
+personRouter.put("/", async (req, res, next) => {
+  const obj = Object.assign({}, req.body);
+  //const personName = await Person.find({ name: obj.name });
+console.log(obj);
+  try {
+    await updatePersonNumber(obj.name, obj.number);
+    res.send("Person number updated succesfully");
+  } catch (err) {
+    next({ status: 502, message: { error: "could not succed" } });
+  }
+});
+
+async function updatePersonNumber(_name, _number) {
+  await Person.updateOne({ name: _name }, { number: _number });
+}
+

@@ -41,26 +41,47 @@ personRouter.delete("/:id", async (request, res) => {
 
 
 
-personRouter.post("/", async (request, response,next) => {
-  const newPerson = Object.assign({}, request.body);
-  const fileData = await Person.find({});
-  newPerson.id = getRandomInt(999);
-  try {
-    if (newPerson.name) {
-      console.log(isNameExist(newPerson.name, fileData))
-          // if (isNameExist(newPerson.name, fileData)) {
-          //   console.log("yyyy")
-          //   return next({ status: 404, error: "name already exists in database" });
+// personRouter.post("/", async (request, response,next) => {
+//   const newPerson = Object.assign({}, request.body);
+//   const fileData = await Person.find({});
+//   newPerson.id = getRandomInt(999);
+//   try {
+//     if (newPerson.name) {
+//       console.log(isNameExist(newPerson.name, fileData))
+//           // if (isNameExist(newPerson.name, fileData)) {
+//           //   console.log("yyyy")
+//           //   return next({ status: 404, error: "name already exists in database" });
             
-          // } else {
-            await createNewPerson(newPerson.id,newPerson.name,newPerson.number);
-            response.json(newPerson);
-          // }
-        }
-  } catch (error) {
-    next({ status: 409, message: { error: err._message } });
+//           // } else {
+//             await createNewPerson(newPerson.id,newPerson.name,newPerson.number);
+//             response.json(newPerson);
+//           // }
+//         }
+//   } catch (error) {
+//     next({ status: 409, message: { error: err._message } });
+//   }
+// });
+
+personRouter.post('/', async (req, res, next) => {
+  const person = Object.assign({}, req.body);
+  if(person.hasOwnProperty('name') && person.hasOwnProperty('number')) {
+      person.id = generateId();
+      // if(await isNameExists(person.name)) {
+          // next({ status: 409, message: 'Person already exists!' });
+      // } else {
+      try {
+          await createNewPerson(person.id, person.name, person.number);
+          res.json("Person added successfully!");
+          res.end();
+      } catch (error) {
+          next({ status: 409, message: error._message });
+      }
+      // }
+  } else {
+      // res.status(400).json('Bad Request!');
+      return next({ status: 400, message: 'Bad Request!' });
   }
-});
+})
 
 
 

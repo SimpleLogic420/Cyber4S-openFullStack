@@ -82,20 +82,32 @@ personRouter.post('/', async (req, res, next) => {
       return next({ status: 400, message: 'Bad Request!' });
   }
 })
+function generateId() {
+  return Number(Math.random().toString(10).substr(2, 4));
+}
 
 
 
 
 module.exports = personRouter;
 
+// async function createNewPerson(id, name, number) {
+//   const person = new Person({ _id: id, name: name, number: number });
+//   try {
+//     await person.save();
+//     return true;
+//   } catch (error) {
+//     return false;
+//   }
+// }
 async function createNewPerson(id, name, number) {
   const person = new Person({ _id: id, name: name, number: number });
-  try {
-    await person.save();
-    return true;
-  } catch (error) {
-    return false;
-  }
+  // try {
+  await person.save();
+  //     return true;
+  // } catch (error) {
+  //     return false;
+  // }
 }
 
 

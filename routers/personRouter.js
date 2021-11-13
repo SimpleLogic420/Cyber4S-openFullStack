@@ -48,17 +48,17 @@ personRouter.post("/", async (request, response,next) => {
   try {
     if (newPerson.name) {
       console.log(isNameExist(newPerson.name, fileData))
-          if (isNameExist(newPerson.name, fileData)) {
-            console.log("yyyy")
-            return next({ status: 404, error: "name already exists in database" });
+          // if (isNameExist(newPerson.name, fileData)) {
+          //   console.log("yyyy")
+          //   return next({ status: 404, error: "name already exists in database" });
             
-          } else {
+          // } else {
             await createNewPerson(newPerson.id,newPerson.name,newPerson.number);
             response.json(newPerson);
-          }
+          // }
         }
   } catch (error) {
-    response.json(error);
+    next({ status: 409, message: { error: err._message } });
   }
 });
 
